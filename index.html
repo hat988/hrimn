@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Rare Is My Name? - Fun & Playful Name Discovery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .fun-gradient-text {
+            background: -webkit-linear-gradient(45deg, #f87171, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .animated-heading .h1-word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: shift-up 0.6s forwards;
+        }
+        @keyframes shift-up { to { opacity: 1; transform: translateY(0); } }
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #e5e7eb;
+            border-top: 6px solid #818cf8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .typing-effect { display: inline-block; }
+        .typing-effect::after { content: '|'; animation: blink 0.7s infinite; color: #9ca3af; }
+        @keyframes blink { 50% { opacity: 0; } }
+        .nav-link.active { color: #6366f1; font-weight: 700; }
+        
+        /* --- Styles for Screenshot & Share Feature --- */
+        .flash-animation {
+            animation: flash 0.5s ease-out;
+        }
+        @keyframes flash {
+            0% { box-shadow: 0 0 0 2000px rgba(255, 255, 255, 0); }
+            50% { box-shadow: 0 0 0 2000px rgba(255, 255, 255, 1); }
+            100% { box-shadow: 0 0 0 2000px rgba(255, 255, 255, 0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-semibold tracking-tight text-slate-700">
+                How Rare Is My Name?
+            </a>
+            <div class="hidden md:flex space-x-8 font-semibold">
+                <a href="index.html" class="text-slate-600 hover:text-indigo-500 transition duration-200 nav-link active">Home</a>
+                <a href="about.html" class="text-slate-600 hover:text-indigo-500 transition duration-200 nav-link">About Us</a>
+                <a href="contact.html" class="text-slate-600 hover:text-indigo-500 transition duration-200 nav-link">Contact</a>
+                <a href="disclaimer.html" class="text-slate-600 hover:text-indigo-500 transition duration-200 nav-link">Disclaimer</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-slate-700">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-3 font-semibold">
+             <a href="index.html" class="block text-slate-600 hover:text-indigo-500 transition duration-200 nav-link active">Home</a>
+             <a href="about.html" class="block text-slate-600 hover:text-indigo-500 transition duration-200 nav-link">About Us</a>
+             <a href="contact.html" class="block text-slate-600 hover:text-indigo-500 transition duration-200 nav-link">Contact</a>
+             <a href="disclaimer.html" class="block text-slate-600 hover:text-indigo-500 transition duration-200 nav-link">Disclaimer</a>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto px-6 py-8 md:py-12">
+        <section class="text-center">
+             <h1 class="animated-heading text-5xl md:text-7xl font-extrabold text-slate-900 mb-4 min-h-[100px] md:min-h-[170px]">
+             </h1>
+            <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">Pop your first name in the box to uncover its rarity, secret meaning, and much more!</p>
+        </section>
+        
+        <div id="ad-slot-top-banner" class="min-h-[90px] w-full max-w-4xl mx-auto my-8"></div>
+
+        <div class="w-full grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+            <div id="ad-slot-left-vertical" class="hidden lg:block min-h-[600px]"></div>
+
+            <section class="lg:col-span-3">
+                <form id="name-form" class="flex flex-col sm:flex-row gap-4">
+                    <input type="text" id="name-input" placeholder="Enter your first name..." class="flex-grow w-full px-5 py-4 text-lg text-slate-700 bg-white border-2 border-slate-300 rounded-full focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition duration-200 shadow-sm" required>
+                    <button type="submit" class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold text-lg px-8 py-4 rounded-full hover:scale-105 transform transition duration-300 shadow-lg hover:shadow-xl focus:ring-4 focus:ring-purple-300">
+                        Discover!
+                    </button>
+                </form>
+
+                 <div id="results-section" class="mt-12 w-full mx-auto hidden">
+                    <div id="loader-container" class="text-center p-8">
+                        <div class="loader mx-auto"></div>
+                        <p id="loader-text" class="mt-6 text-lg text-slate-600 font-medium h-7"></p>
+                    </div>
+                    <div id="results-content" class="hidden bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-slate-200 transition-opacity duration-500">
+                        <h2 class="text-3xl sm:text-4xl font-bold text-center mb-8">The Scoop on <span id="result-name" class="text-indigo-600 font-bold"></span></h2>
+                        <div class="mb-8">
+                            <h3 class="font-semibold text-lg mb-4 text-slate-700">Rarity Meter</h3>
+                            <div class="relative h-8 w-full bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 rounded-full shadow-inner">
+                                <div id="rarity-indicator-wrapper" class="absolute top-0 h-full transition-all duration-1000 ease-out" style="left: 0%;">
+                                   <div class="relative w-1 h-12 bg-slate-800 rounded-full bottom-2 shadow-md">
+                                       <div class="absolute w-3 h-3 bg-white border-2 border-slate-800 rounded-full -top-1 -left-1"></div>
+                                   </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between text-sm mt-2 text-slate-500 font-medium">
+                                <span>Common</span>
+                                <span>Uncommon</span>
+                                <span>Super Rare</span>
+                            </div>
+                            <p class="text-center text-2xl font-bold mt-4" id="rarity-text"></p>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-x-8 gap-y-6">
+                            <div class="bg-indigo-50 p-5 rounded-2xl">
+                                <h3 class="font-bold text-lg mb-2 text-indigo-800">Meaning</h3>
+                                <p id="meaning-text" class="text-indigo-700 text-base leading-relaxed typing-effect"></p>
+                            </div>
+                            <div class="bg-purple-50 p-5 rounded-2xl">
+                                <h3 class="font-bold text-lg mb-2 text-purple-800">Personality Traits</h3>
+                                <p id="traits-text" class="text-purple-700 text-base leading-relaxed typing-effect"></p>
+                            </div>
+                            <div class="bg-green-50 p-5 rounded-2xl">
+                                <h3 class="font-bold text-lg mb-2 text-green-800">Philosophy</h3>
+                                <p id="philosophy-text" class="text-green-700 text-base leading-relaxed typing-effect"></p>
+                            </div>
+                            <div class="bg-yellow-50 p-5 rounded-2xl">
+                                <h3 class="font-bold text-lg mb-2 text-yellow-800">Extra Insights</h3>
+                                <div class="text-yellow-700 space-y-2">
+                                    <p><span class="font-semibold">Gender:</span> <span id="gender-text"></span></p>
+                                    <p><span class="font-semibold">Frequency:</span> <span id="frequency-text"></span></p>
+                                    <p><span class="font-semibold">Numerology:</span> <span id="numerology-text"></span></p>
+                                    <p><span class="font-semibold">Astrology Sign(s):</span> <span id="astrology-text"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Share Button -->
+                        <div class="mt-8 text-center">
+                            <button id="share-button" class="bg-gradient-to-r from-green-400 to-blue-500 text-white font-bold text-lg px-8 py-4 rounded-full hover:scale-105 transform transition duration-300 shadow-lg hover:shadow-xl focus:ring-4 focus:ring-green-300">
+                                Share Your Result!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <div id="ad-slot-right-vertical" class="hidden lg:block min-h-[600px]"></div>
+        </div>
+        
+        <section id="about-tool" class="mt-24 pt-10">
+            <div class="max-w-3xl mx-auto space-y-8 bg-white p-8 sm:p-10 rounded-3xl shadow-lg">
+                <h2 class="text-4xl font-bold text-slate-900 text-center">The Wonderful World of Names</h2>
+                <h3 class="text-2xl font-semibold text-slate-800 pt-4">What's in a Name? More Than You Think!</h3>
+                <p class="text-slate-600 leading-relaxed">Have you ever wondered about the story behind your name? Is it common, or are you one of the few? A name is one of the first gifts we receive, a label that becomes intertwined with our identity, our personality, and how the world sees us. It's more than just a word; it's a piece of history, a cultural fingerprint, and a connection to our ancestors. Our "How Rare Is My Name" tool is designed to be a fun, engaging portal into this fascinating world. By simply entering your name, you can embark on a journey to discover not just its rarity, but also its hidden meanings, the personality traits associated with it, and its philosophical roots. This exploration is not about defining who you are, but about discovering the rich tapestry of history and culture that your name is a part of.</p>
+                <h3 class="text-2xl font-semibold text-slate-800 pt-4">The Science and Art of Onomastics</h3>
+                <p class="text-slate-600 leading-relaxed">The study of names, known as onomastics, is a captivating field that blends linguistics, history, anthropology, and sociology. Scholars in this field, called onomasticians, explore the origins (etymology) and evolution of names. They study how names migrate across cultures, change over time, and reflect the values of a society. For example, the popularity of certain names can often be traced back to influential historical figures, beloved characters in literature, or even major cultural events. In ancient times, names were often believed to hold great power and were chosen to bestow blessings, protection, or a specific destiny upon a child. In some cultures, a name might describe a parent's hopes for their child, like "bravery" or "wisdom." Our tool taps into this rich academic field, distilling complex historical and linguistic data into fun, easy-to-understand insights. We've sifted through countless sources to build a database that reflects this incredible diversity, allowing you to see where your name fits into this global story.</p>
+                <div id="ad-slot-in-content" class="min-h-[250px] w-full my-8"></div>
+                <h3 class="text-2xl font-semibold text-slate-800 pt-4">How Do We Measure Rarity?</h3>
+                <p class="text-slate-600 leading-relaxed">You might be wondering how we determine if a name is "Very Common" or "Very Rare." The process is a blend of data analysis and cultural context. Our primary method involves analyzing large datasets of names gathered from public records, social trends, and historical documents. We then use statistical models to calculate the estimated frequency of each name within a given population. A name like "Sagar" or "Priya" might appear frequently in our Indian name datasets, placing it in the "Common" category. Conversely, a name like "Aethelred" would be exceedingly rare in that same dataset but might have been more common in Anglo-Saxon England.</p>
+                <p class="text-slate-600 leading-relaxed">However, rarity isn't just about numbers. It's also about perception and cultural relevance. A name might be numerically rare but culturally significant, belonging to a mythological hero or a historical figure. Our algorithm tries to account for these nuances, but it's important to remember that this is an estimation designed for entertainment. The data is a snapshot in time and can change as naming trends evolve. New names rise in popularity, while others fade into obscurity, making the landscape of names a constantly shifting and exciting field of study.</p>
+                <h3 class="text-2xl font-semibold text-slate-800 pt-4">The Psychology of a Name</h3>
+                <p class="text-slate-600 leading-relaxed">Believe it or not, your name can have a subtle but significant impact on your life. This concept, sometimes called the "name-letter effect," is a fascinating area of psychological research. Studies have shown that people tend to have a slight preference for things that start with the same letter as their first name. Beyond that, the perceived sound and feel of a name can influence first impressions. Names that sound soft and melodic might be subconsciously associated with gentler personalities, while names with hard, strong sounds might evoke a sense of power or determination.</p>
+                <h3 class="text-2xl font-semibold text-slate-800 pt-4">A Universe of Meanings: Numerology and Astrology</h3>
+                <p class="text-slate-600 leading-relaxed">For centuries, many cultures have believed that names hold a deeper, mystical significance. Two of the most popular systems for uncovering this hidden layer are numerology and astrology. Numerology is the ancient belief that numbers, derived from the letters of a name and a person's birth date, have a specific vibrational energy that can reveal personality traits and life paths. Each letter is assigned a number, and by adding them up in various combinations, a numerologist can create a profile of a person's strengths, challenges, and destiny. Our tool includes a simple numerology number associated with your name, offering a glimpse into this esoteric tradition.</p>
+                <h3 class="text-2xl font-semibold text-slate-800 pt-4">A Tool for Fun and Discovery</h3>
+                <p class="text-slate-600 leading-relaxed">While we have put a great deal of effort into creating a rich and accurate database, it is essential to remember that "How Rare Is My Name" is first and foremost a tool for entertainment and curiosity. The world of names is vast and ever-changing, and no single tool can capture its full complexity. The meanings, traits, and philosophies presented are based on historical data, cultural interpretations, and sometimes, even mythology. They are meant to inspire, entertain, and make you think, not to provide a scientific or psychological profile.</p>
+            </div>
+        </section>
+    </main>
+    
+    <div class="container mx-auto px-6">
+        <div id="ad-slot-bottom-banner" class="min-h-[90px] w-full max-w-4xl mx-auto my-8"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-300 mt-12">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center text-center md:text-left space-y-4 md:space-y-0">
+                <p>&copy; 2024 How Rare Is My Name?. Made for fun!</p>
+                <div class="flex space-x-6 font-semibold">
+                    <a href="privacy.html" class="hover:text-white transition duration-200">Privacy Policy</a>
+                    <a href="terms.html" class="hover:text-white transition duration-200">Terms & Conditions</a>
+                    <a href="dmca.html" class="hover:text-white transition duration-200">DMCA</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Screenshot Modal -->
+    <div id="share-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg text-center transform transition-all scale-95 opacity-0" id="modal-content">
+            <h3 class="text-2xl font-bold text-slate-800 mb-4">Share Your Awesome Name!</h3>
+            <div class="border-2 border-slate-200 rounded-lg p-2">
+                <img id="screenshot-image" src="" alt="Your Name Rarity Result" class="rounded-md w-full" />
+            </div>
+            <p class="text-slate-600 mt-4 mb-4">Share this result with your friends!</p>
+            <div class="flex justify-center items-center gap-4 flex-wrap">
+                <a id="twitter-share" href="#" target="_blank" class="bg-[#1DA1F2] text-white font-semibold py-2 px-5 rounded-full transition-transform hover:scale-110">Twitter</a>
+                <a id="facebook-share" href="#" target="_blank" class="bg-[#1877F2] text-white font-semibold py-2 px-5 rounded-full transition-transform hover:scale-110">Facebook</a>
+                <a id="whatsapp-share" href="#" target="_blank" class="bg-[#25D366] text-white font-semibold py-2 px-5 rounded-full transition-transform hover:scale-110">WhatsApp</a>
+            </div>
+            <button id="close-modal" class="mt-6 text-slate-500 font-semibold hover:text-slate-800">Close</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const nameData = {
+                'aarav': { rarity: 'Very Common', meaning: 'Peaceful, calm, musical sound', traits: 'Peaceful by nature, creative, musical inclinations, calm demeanor.', gender: 'Male', frequency: '1 in 50 males', philosophy: 'Represents the ancient Hindu concept of inner peace (Shanti).', numerology: '7', astrology: 'Water signs' },
+                'advika': { rarity: 'Rare', meaning: 'Unique, the one who is unique', traits: 'Creative, independent, a natural leader, confident, individualistic.', gender: 'Female', frequency: '1 in 400 females', philosophy: 'Embodies the principle of individuality and self-uniqueness.', numerology: '1', astrology: 'Aries, Leo' },
+                'arjun': { rarity: 'Common', meaning: 'Bright, shining, white', traits: 'Natural warrior spirit, determined, focused, competitive, strong sense of justice.', gender: 'Male', frequency: '1 in 80 males', philosophy: 'Represents the eternal struggle between duty (dharma) and personal desires.', numerology: '1', astrology: 'Leo, Aries' },
+                'vihaan': { rarity: 'Popular', meaning: 'Dawn, morning', traits: 'Optimistic, energetic, brings new ideas, innovative thinker.', gender: 'Male', frequency: '1 in 60 males', philosophy: 'Symbolizes hope and new beginnings.', numerology: '5', astrology: 'Gemini, Sagittarius' },
+                'anya': { rarity: 'Popular', meaning: 'Inexhaustible, limitless', traits: 'Resilient, determined, boundless energy, transformative, inspiring.', gender: 'Female', frequency: '1 in 110 females', philosophy: 'Embodies the concept of Akshaya - the inexhaustible source of divine energy.', numerology: '1', astrology: 'Aries, Leo' },
+                'divya': { rarity: 'Very Common', meaning: 'Divine, heavenly, brilliant', traits: 'Divine qualities, heavenly nature, brilliant mind, supernatural insight.', gender: 'Female', frequency: '1 in 65 females', philosophy: 'Represents Divya Guna - divine qualities manifesting through human consciousness.', numerology: '7', astrology: 'Pisces, Aquarius' },
+                'sagar': { rarity: 'Very Common', meaning: 'Ocean, sea', traits: 'Deep, thoughtful, vast knowledge, calm but can be powerful.', gender: 'Male', frequency: '1 in 70 males', philosophy: 'Represents depth, mystery, and boundless potential.', numerology: '1', astrology: 'Cancer, Scorpio' },
+                'priya': { rarity: 'Very Common', meaning: 'Beloved, darling', traits: 'Caring, loving, protective, strong cultural roots, traditional values.', gender: 'Female', frequency: '1 in 40 females', philosophy: 'Represents the value of relationships and love.', numerology: '5', astrology: 'Taurus, Libra' },
+                'ahan': { rarity: 'Very Rare', meaning: 'First ray of light, dawn', traits: 'Pioneer, brings new beginnings, optimistic, charismatic.', gender: 'Male', frequency: '1 in 450 males', philosophy: 'Represents the triumph of light over darkness and new opportunities.', numerology: '1', astrology: 'Sagittarius, Aquarius' },
+                'aqib': { rarity: 'Uncommon', meaning: 'Follower, successor', traits: 'Loyal, dependable, follows through on commitments.', gender: 'Male', frequency: '1 in 300 males', philosophy: 'Represents the importance of legacy and continuing a path.', numerology: '5', astrology: 'Virgo, Capricorn' }
+            };
+
+            const raritySettings = {
+                'Very Common': { duration: 3000, position: '10%', milestones: [] },
+                'Common': { duration: 5000, position: '30%', milestones: [] },
+                'Popular': { duration: 6000, position: '40%', milestones: [] },
+                'Moderately Common': { duration: 7000, position: '50%', milestones: [] },
+                'Uncommon': { duration: 8000, position: '60%', milestones: [{ time: 5000, text: "Hmm, your name seems uncommon..." }] },
+                'Rare': { duration: 12000, position: '75%', milestones: [{ time: 6000, text: "Searching deeper..." }, { time: 9000, text: "Your name appears to be rare..." }] },
+                'Very Rare': { duration: 15000, position: '90%', milestones: [{ time: 5000, text: "Digging into the archives..." }, { time: 10000, text: "This is a special one!" }] }
+            };
+
+            // --- DOM ELEMENTS ---
+            const form = document.getElementById('name-form');
+            const nameInput = document.getElementById('name-input');
+            const resultsSection = document.getElementById('results-section');
+            const loaderContainer = document.getElementById('loader-container');
+            const loaderText = document.getElementById('loader-text');
+            const resultsContent = document.getElementById('results-content');
+            let loadingInterval;
+
+            // --- FUZZY SEARCH HELPER ---
+            function getLevenshteinDistance(a, b) {
+                if (a.length === 0) return b.length;
+                if (b.length === 0) return a.length;
+                const matrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));
+                for (let i = 0; i <= a.length; i++) { matrix[0][i] = i; }
+                for (let j = 0; j <= b.length; j++) { matrix[j][0] = j; }
+                for (let j = 1; j <= b.length; j++) {
+                    for (let i = 1; i <= a.length; i++) {
+                        const substitutionCost = a[i - 1] === b[j - 1] ? 0 : 1;
+                        matrix[j][i] = Math.min(
+                            matrix[j][i - 1] + 1,
+                            matrix[j - 1][i] + 1,
+                            matrix[j - 1][i - 1] + substitutionCost
+                        );
+                    }
+                }
+                return matrix[b.length][a.length];
+            }
+
+            // --- ANIMATED HEADING LOGIC ---
+            function setupAnimatedHeading() {
+                const headingText = "What's the rarity score of Your Name?";
+                const headingElement = document.querySelector('.animated-heading');
+                if (!headingElement) return;
+                headingElement.innerHTML = '';
+                const words = headingText.split(' ');
+                words.forEach((word, index) => {
+                    const wordSpan = document.createElement('span');
+                    wordSpan.className = 'h1-word';
+                    wordSpan.textContent = word + '\u00A0';
+                    wordSpan.style.animationDelay = `${index * 0.15}s`;
+                    if (index > 4) { wordSpan.classList.add('fun-gradient-text'); }
+                    headingElement.appendChild(wordSpan);
+                });
+            }
+            setupAnimatedHeading();
+
+            // --- MOBILE MENU LOGIC ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // --- SEARCH LOGIC ---
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = nameInput.value.trim().toLowerCase();
+                if (!name) return;
+
+                // Reset UI
+                resultsSection.classList.remove('hidden');
+                resultsContent.classList.add('hidden');
+                loaderContainer.classList.remove('hidden');
+                loaderText.textContent = '';
+                clearInterval(loadingInterval);
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                let data = nameData[name];
+                let settings = data ? raritySettings[data.rarity] : null;
+                let bestMatchName = name;
+
+                if (!data) {
+                    let minDistance = Infinity;
+                    let closestName = null;
+                    for (const dbName in nameData) {
+                        const distance = getLevenshteinDistance(name, dbName);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestName = dbName;
+                        }
+                    }
+
+                    if (closestName && minDistance <= 2 && name.length > 2) {
+                        data = nameData[closestName];
+                        settings = data ? raritySettings[data.rarity] : null;
+                        bestMatchName = closestName;
+                    }
+                }
+
+                if (data && settings) {
+                    startLoading(data, settings, bestMatchName);
+                } else {
+                    handleUnrecognizedName();
+                }
+            });
+
+            function startLoading(data, settings, bestMatchName) {
+                let milestones = [...settings.milestones];
+                loaderText.textContent = 'Analyzing your name...';
+                const intervalTime = settings.duration / (milestones.length + 2);
+                let milestoneIndex = 0;
+                loadingInterval = setInterval(() => {
+                    if(milestoneIndex < milestones.length) {
+                        loaderText.textContent = milestones[milestoneIndex].text;
+                        milestoneIndex++;
+                    }
+                }, intervalTime);
+
+                setTimeout(() => {
+                    clearInterval(loadingInterval);
+                    displayResults(data, settings, bestMatchName);
+                }, settings.duration);
+            }
+
+            function handleUnrecognizedName() {
+                loaderText.textContent = 'Checking our deepest records...';
+                setTimeout(() => {
+                    const unrecognizedData = {
+                        rarity: "Super Rare",
+                        meaning: "We don't have a record for this name, which is a strong indicator of its uniqueness.",
+                        traits: "Individuals with such rare names often forge their own paths. They are seen as pioneers and unique souls who aren't afraid to stand out.",
+                        philosophy: "A name this unique suggests a story yet to be written, a legacy waiting to be built.",
+                        gender: "N/A",
+                        frequency: "Extremely Low",
+                        numerology: "N/A",
+                        astrology: "N/A"
+                    };
+                    const unrecognizedSettings = { position: '98%' };
+                    displayResults(unrecognizedData, unrecognizedSettings, nameInput.value.trim().toLowerCase(), true);
+                }, 2500);
+            }
+
+            function displayResults(data, settings, bestMatchName, isUnrecognized = false) {
+                loaderContainer.classList.add('hidden');
+                resultsContent.classList.remove('hidden');
+
+                const displayName = bestMatchName.charAt(0).toUpperCase() + bestMatchName.slice(1);
+                document.getElementById('result-name').textContent = displayName;
+                
+                const originalInput = nameInput.value.trim().toLowerCase();
+                if (bestMatchName !== originalInput && !isUnrecognized) {
+                     document.getElementById('rarity-text').innerHTML = `Showing results for <span class="font-bold">${displayName}</span>. Rarity: ${data.rarity}.`;
+                } else if (isUnrecognized) {
+                    document.getElementById('rarity-text').textContent = "Wow, That's Super Rare!";
+                } else {
+                    document.getElementById('rarity-text').textContent = `Your Name Is ${data.rarity}.`;
+                }
+                
+                const indicator = document.getElementById('rarity-indicator-wrapper');
+                setTimeout(() => { indicator.style.left = settings.position; }, 100);
+
+                typeWriter('meaning-text', data.meaning || 'N/A');
+                typeWriter('traits-text', data.traits || 'N/A');
+                typeWriter('philosophy-text', data.philosophy || 'N/A');
+                
+                document.getElementById('gender-text').textContent = data.gender || 'N/A';
+                document.getElementById('frequency-text').textContent = data.frequency || 'N/A';
+                document.getElementById('numerology-text').textContent = data.numerology || 'N/A';
+                document.getElementById('astrology-text').textContent = data.astrology || 'N/A';
+            }
+            
+            function typeWriter(elementId, text) {
+                const element = document.getElementById(elementId);
+                if (!element) return;
+                element.innerHTML = '';
+                element.classList.add('typing-effect');
+                let i = 0;
+                const speed = 20;
+                function type() {
+                    if (i < text.length) {
+                        element.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(type, speed);
+                    } else {
+                       if(element) element.classList.remove('typing-effect');
+                    }
+                }
+                type();
+            }
+
+            // --- SCREENSHOT AND SHARE LOGIC ---
+            const shareButton = document.getElementById('share-button');
+            const shareModal = document.getElementById('share-modal');
+            const modalContent = document.getElementById('modal-content');
+            const closeModalButton = document.getElementById('close-modal');
+            const screenshotImage = document.getElementById('screenshot-image');
+            const resultsContentDiv = document.getElementById('results-content');
+
+            // Ensure the modal is hidden by default when the script loads
+            shareModal.style.display = 'none';
+
+            shareButton.addEventListener('click', () => {
+                // Hide the button itself from the screenshot
+                shareButton.style.display = 'none';
+                
+                // Add flash animation
+                resultsContentDiv.classList.add('flash-animation');
+
+                // Allow animation to play
+                setTimeout(() => {
+                    html2canvas(resultsContentDiv, { 
+                        useCORS: true, 
+                        backgroundColor: '#ffffff',
+                        onclone: (document) => {
+                           // Ensure the button is hidden in the cloned document too
+                           document.getElementById('share-button').style.display = 'none';
+                        }
+                    }).then(canvas => {
+                        const imageURL = canvas.toDataURL('image/png');
+                        screenshotImage.src = imageURL;
+
+                        // Setup share links
+                        const shareText = `I just discovered the story behind my name! Check out how rare it is at:`;
+                        const shareUrl = 'https://howrareismyname.com';
+                        document.getElementById('twitter-share').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+                        document.getElementById('facebook-share').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+                        document.getElementById('whatsapp-share').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
+
+                        // Show modal with animation
+                        shareModal.style.display = 'flex';
+                        setTimeout(() => {
+                           modalContent.style.opacity = '1';
+                           modalContent.style.transform = 'scale(1)';
+                        }, 50);
+
+                        // Show the button again for the user
+                        shareButton.style.display = 'block'; 
+                        resultsContentDiv.classList.remove('flash-animation');
+                    });
+                }, 500); // Wait for flash animation to finish
+            });
+
+            closeModalButton.addEventListener('click', () => {
+                modalContent.style.opacity = '0';
+                modalContent.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    shareModal.style.display = 'none';
+                }, 200);
+            });
+        });
+    </script>
+
+</body>
+</html>
+
