@@ -41,17 +41,21 @@
         .nav-link.active { color: #6366f1; font-weight: 700; }
         
         /* --- Styles for Screenshot & Share Feature --- */
-        .flash-animation {
-            animation: flash 0.5s ease-out;
+        #flash-overlay {
+            pointer-events: none; /* Allows clicks to go through */
+            animation: flash-bang 0.5s ease-out;
         }
-        @keyframes flash {
-            0% { box-shadow: 0 0 0 2000px rgba(255, 255, 255, 0); }
-            50% { box-shadow: 0 0 0 2000px rgba(255, 255, 255, 1); }
-            100% { box-shadow: 0 0 0 2000px rgba(255, 255, 255, 0); }
+        @keyframes flash-bang {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
         }
     </style>
 </head>
 <body class="text-slate-800">
+
+    <!-- Flash Effect Overlay -->
+    <div id="flash-overlay" class="fixed inset-0 bg-white z-[9999] opacity-0"></div>
 
     <!-- Header & Navigation -->
     <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
@@ -246,6 +250,7 @@
             const loaderContainer = document.getElementById('loader-container');
             const loaderText = document.getElementById('loader-text');
             const resultsContent = document.getElementById('results-content');
+            const flashOverlay = document.getElementById('flash-overlay');
             let loadingInterval;
 
             // --- FUZZY SEARCH HELPER ---
@@ -433,45 +438,59 @@
             // Ensure the modal is hidden by default when the script loads
             shareModal.style.display = 'none';
 
-            shareButton.addEventListener('click', () => {
+            shareButton.addEventListener('click', async () => {
                 // Hide the button itself from the screenshot
                 shareButton.style.display = 'none';
                 
-                // Add flash animation
-                resultsContentDiv.classList.add('flash-animation');
-
-                // Allow animation to play
-                setTimeout(() => {
-                    html2canvas(resultsContentDiv, { 
+                // Trigger flash animation
+                flashOverlay.style.animation = 'none';
+                void flashOverlay.offsetWidth; // Trigger reflow
+                flashOverlay.style.animation = 'flash-bang 0.5s ease-out';
+                
+                try {
+                    const canvas = await html2canvas(resultsContentDiv, { 
                         useCORS: true, 
                         backgroundColor: '#ffffff',
                         onclone: (document) => {
-                           // Ensure the button is hidden in the cloned document too
                            document.getElementById('share-button').style.display = 'none';
                         }
-                    }).then(canvas => {
-                        const imageURL = canvas.toDataURL('image/png');
-                        screenshotImage.src = imageURL;
+                    });
 
-                        // Setup share links
-                        const shareText = `I just discovered the story behind my name! Check out how rare it is at:`;
-                        const shareUrl = 'https://howrareismyname.com';
+                    // Show the button again for the user right after capture
+                    shareButton.style.display = 'block';
+
+                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                    const file = new File([blob], 'name-rarity.png', { type: 'image/png' });
+                    const shareText = `I just discovered the story behind my name! Check out how rare it is.`;
+                    const shareUrl = 'https://howrareismyname.com';
+
+                    // Use Web Share API if available (modern mobile browsers)
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: 'How Rare Is My Name?',
+                            text: shareText,
+                            url: shareUrl
+                        });
+                    } else {
+                        // Fallback to modal for desktop or unsupported browsers
+                        screenshotImage.src = canvas.toDataURL('image/png');
                         document.getElementById('twitter-share').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
                         document.getElementById('facebook-share').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
                         document.getElementById('whatsapp-share').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
 
-                        // Show modal with animation
                         shareModal.style.display = 'flex';
                         setTimeout(() => {
                            modalContent.style.opacity = '1';
                            modalContent.style.transform = 'scale(1)';
                         }, 50);
-
-                        // Show the button again for the user
-                        shareButton.style.display = 'block'; 
-                        resultsContentDiv.classList.remove('flash-animation');
-                    });
-                }, 500); // Wait for flash animation to finish
+                    }
+                } catch (error) {
+                    console.error('Oops, something went wrong!', error);
+                    // Show the button again in case of an error
+                    shareButton.style.display = 'block';
+                    alert('Could not capture the result. Please try again.');
+                }
             });
 
             closeModalButton.addEventListener('click', () => {
